@@ -1,0 +1,46 @@
+<ui:composition template="base.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui">
+
+	<ui:define name="main-context">
+		<b:jumbotron>
+			<b:container>
+				<h4>Criar Grupos</h4>
+					Para criar um conjunto de currículos.... 	                              
+	            </b:container>
+		</b:jumbotron>
+		<b:container>
+			<b:well>
+				<h:form>
+					<h:panelGrid columns="1">
+						<p:inputText id="nomeGrupo" value="#{createGroupBean.groupName}"
+							placeholder="Nome do grupo" size="30" required="true" >
+						</p:inputText>
+
+						<p:fileUpload
+							fileUploadListener="#{createGroupBean.handleFileUpload}"
+							mode="advanced" dragDropSupport="false" multiple="true"
+							auto="true" label="Carregar Arquivo ou Pasta"
+							sizeLimit="10000000" allowTypes="/(\.|\/)(xml)$/" update="dataList" />
+
+						<p:dataList id="dataList" value="#{createGroupBean.fileNames}" var="name" rendered="#{not empty createGroupBean.fileNames}">
+							<h:outputText value="#{name}" />
+						</p:dataList>
+
+						<p:selectBooleanCheckbox value="#{createGroupBean.existingGroup}" />
+						<h:outputText value="Selecionar grupos existentes " />
+
+						<p:pickList id="pickList" value="#{createGroupBean.groups}"
+							var="groups" itemLabel="#{groups}" itemValue="#{groups}" />
+					</h:panelGrid>
+
+					<p:commandButton id="novoGrupo" validateClient="true" value="Novo Grupo" actionListener="#{createGroupBean.create}"/>
+				</h:form>
+			</b:well>
+		</b:container>
+
+	</ui:define>
+</ui:composition>
