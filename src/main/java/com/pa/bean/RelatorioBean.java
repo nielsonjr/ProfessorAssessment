@@ -10,17 +10,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
-import com.pa.analyzer.GroupAnalyzer;
-import com.pa.analyzer.GroupResult;
-
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.TreeNode;
 
+import com.pa.analyzer.GroupAnalyzer;
 import com.pa.comparator.ComparationVO;
+import com.pa.comparator.SetCurriculoResult;
 import com.pa.database.impl.DatabaseFacade;
 import com.pa.entity.Group;
-import com.pa.entity.Publication;
 import com.pa.entity.QualisData;
 import com.pa.util.EnumPublicationLocalType;
 import com.pa.util.EnumQualisClassification;
@@ -33,15 +31,15 @@ public class RelatorioBean {
 	private List<QualisData> qualisDataPeriodic;
 	
 	private Boolean checkQualisDataConference = true;
-	private Boolean checkQualisDataPeriodic;
-	private Boolean checkOrientations;
+	private Boolean checkQualisDataPeriodic = false;
+	private Boolean checkOrientations = true;
 	
 	private QualisData selectedQualisDataConference;
 	private QualisData selectedQualisDataPeriodic;
 	
 	private TreeNode root = null;
-	     
-    @PostConstruct
+
+	@PostConstruct
     public void init() {
         List<Group> groupsTarget = new ArrayList<Group>();
          
@@ -69,38 +67,31 @@ public class RelatorioBean {
     		qualisDataMap.put(EnumPublicationLocalType.PERIODIC, selectedQualisDataPeriodic);
     		qualisDataMap.put(EnumPublicationLocalType.CONFERENCE, selectedQualisDataConference);
     		
-			GroupResult gR = GroupAnalyzer.getInstance().analyzerGroup(group, qualisDataMap);
+			SetCurriculoResult gR = GroupAnalyzer.getInstance().analyzerGroup(group, qualisDataMap);
 			
+			//conferencias
     		if(checkQualisDataConference) {
     			TreeNode conferences = null;
     			
     			if(!mapTypeByNode.containsKey("conferences")) {
-    				conferences = new DefaultTreeNode("conferences", new ComparationVO("Conferencias", "-"), root);
+    				conferences = new DefaultTreeNode("conferences", new ComparationVO("Conferências", "-"), root);
 					mapTypeByNode.put("conferences", conferences);
 				}
 				else {
 					conferences = mapTypeByNode.get("conferences");
 					ComparationVO valueObject = (ComparationVO) conferences.getData();
 					
-					String[] valueConference = valueObject.getValue();
-					valueConference[valueConference.length - 1] = "-";
-					valueObject.setValue(valueConference);
+					List<String> valueConference = valueObject.getValues();
+					valueConference.add("-") ;
 				}
     			
     			
-    			Map<EnumQualisClassification, List<Publication>> conferencesByQualis = gR.getConferencesByQualis();
+    			Map<EnumQualisClassification, Double> conferencesByQualis = gR.getAverageConferencesByQualis();
     			EnumQualisClassification[] qualis = EnumQualisClassification.values();
     			
     			for (EnumQualisClassification enumQualisClassification : qualis) {
-					List<Publication> publications = conferencesByQualis.get(enumQualisClassification);
-					String value = null;
-					
-					if(publications == null) {
-						value = "0";
-					}
-					else {
-						value = String.valueOf(publications.size());
-					}
+					Double averageConferences = conferencesByQualis.get(enumQualisClassification);
+					String value = averageConferences.toString();
 					
 					if(!mapTypeByNode.containsKey("conferences" + enumQualisClassification.toString())) {
 						TreeNode conferencesQualis = new DefaultTreeNode("conferences" + enumQualisClassification.toString(), new ComparationVO(enumQualisClassification.toString(), value), conferences);
@@ -110,12 +101,97 @@ public class RelatorioBean {
 						TreeNode conferencesQualis = mapTypeByNode.get("conferences" + enumQualisClassification.toString());
 						ComparationVO valueObject = (ComparationVO) conferencesQualis.getData();
 						
-						String[] valueConference = valueObject.getValue();
-						valueConference[valueConference.length - 1] = value;
-						valueObject.setValue(valueConference);
+						List<String> valueConference = valueObject.getValues();
+						valueConference.add(value);
 					}
 				}
-//    			ComparationVO cVO = new ComparationVO(name, value);
+    		}
+    		
+    		if(checkQualisDataPeriodic) {
+    			TreeNode periodics = null;
+    			
+    			if(!mapTypeByNode.containsKey("periodics")) {
+    				periodics = new DefaultTreeNode("periodics", new ComparationVO("Periódicos", "-"), root);
+					mapTypeByNode.put("periodics", periodics);
+				}
+				else {
+					periodics = mapTypeByNode.get("periodics");
+					ComparationVO valueObject = (ComparationVO) periodics.getData();
+					
+					List<String> valueConference = valueObject.getValues();
+					valueConference.add("-") ;
+				}
+    			
+    			
+    			Map<EnumQualisClassification, Double> conferencesByQualis = gR.getAveragePeriodicsByQualis();
+    			EnumQualisClassification[] qualis = EnumQualisClassification.values();
+    			
+    			for (EnumQualisClassification enumQualisClassification : qualis) {
+					Double averagePeriodics = conferencesByQualis.get(enumQualisClassification);
+					String value = averagePeriodics.toString();
+					
+					if(!mapTypeByNode.containsKey("periodics" + enumQualisClassification.toString())) {
+						TreeNode conferencesQualis = new DefaultTreeNode("periodics" + enumQualisClassification.toString(), new ComparationVO(enumQualisClassification.toString(), value), periodics);
+						mapTypeByNode.put("periodics" + enumQualisClassification.toString(), conferencesQualis);
+					}
+					else {
+						TreeNode periodicsQualis = mapTypeByNode.get("periodics" + enumQualisClassification.toString());
+						ComparationVO valueObject = (ComparationVO) periodicsQualis.getData();
+						
+						List<String> valueConference = valueObject.getValues();
+						valueConference.add(value);
+					}
+				}
+    		
+    			
+    		}
+    		
+    		if(checkOrientations) {
+    			TreeNode orientations = null;
+
+    			if(!mapTypeByNode.containsKey("orientations")) {
+    				orientations = new DefaultTreeNode("orientations", new ComparationVO("Orientações", "-"), root);
+    				mapTypeByNode.put("orientations", orientations);
+    			}
+    			else {
+    				orientations = mapTypeByNode.get("orientations");
+    				ComparationVO valueObject = (ComparationVO) orientations.getData();
+
+    				List<String> valueConference = valueObject.getValues();
+    				valueConference.add("-") ;
+    			}
+
+
+    			Double concludedOrientations = gR.getConcludedOrientations();
+    			Double onGoingOrientations = gR.getOnGoingOrientations();
+    			
+    			String concludedOrientationsValue = concludedOrientations.toString();
+    			
+
+    			if(!mapTypeByNode.containsKey("concludedOrientations")) {
+    				TreeNode conferencesQualis = new DefaultTreeNode("concludedOrientations", new ComparationVO("Concluídas", concludedOrientationsValue), orientations);
+    				mapTypeByNode.put("concludedOrientations", conferencesQualis);
+    			}
+    			else {
+    				TreeNode concludedOrientationsNode = mapTypeByNode.get("concludedOrientations");
+    				ComparationVO valueObject = (ComparationVO) concludedOrientationsNode.getData();
+
+    				List<String> concludedOrientationsValues = valueObject.getValues();
+    				concludedOrientationsValues.add(concludedOrientationsValue);
+    			}
+    			
+    			String onGoingOrientationsValue = onGoingOrientations.toString();
+    			if(!mapTypeByNode.containsKey("onGoingOrientations")) {
+    				TreeNode onGoingOrientationsNode = new DefaultTreeNode("onGoingOrientations", new ComparationVO("Em Andamento", onGoingOrientationsValue), orientations);
+    				mapTypeByNode.put("onGoingOrientations", onGoingOrientationsNode);
+    			}
+    			else {
+    				TreeNode onGoingOrientationsNode = mapTypeByNode.get("onGoingOrientations");
+    				ComparationVO valueObject = (ComparationVO) onGoingOrientationsNode.getData();
+
+    				List<String> onGoingOrientationsValues = valueObject.getValues();
+    				onGoingOrientationsValues.add(onGoingOrientationsValue);
+    			}
     		}
 			
 		}
@@ -193,4 +269,5 @@ public class RelatorioBean {
 	public void setRoot(TreeNode root) {
 		this.root = root;
 	}
+
 }

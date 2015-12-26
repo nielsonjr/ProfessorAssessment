@@ -49,7 +49,7 @@ public class SetCurriculoMetricsTest {
 		group.getCurriculos().add(fernando);
 		group.getCurriculos().add(nielson);
 		
-		SetCurriculoMetrics metrics = new SetCurriculoMetrics();
+//		SetCurriculoMetrics metrics = new SetCurriculoMetrics();
 		//XXX adicionar map 
 //		result = metrics.calculateMetrics(group, Arrays.asList(new QualisData()));
 	}

@@ -1,13 +1,19 @@
 package com.pa.comparator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ComparationVO {
 
 	private String name;
-	private String[] value;
+	private List<String> values = new ArrayList<String>();
 	
 	public ComparationVO(String name, String... value) {
 		this.name = name;
-		this.value = value;
+		
+		for (String string : value) {
+			values.add(string);
+		}
 	}
 
 	public String getName() {
@@ -18,12 +24,12 @@ public class ComparationVO {
 		this.name = name;
 	}
 
-	public String[] getValue() {
-		return value;
+	public List<String> getValues() {
+		return values;
 	}
 
-	public void setValue(String[] value) {
-		this.value = value;
+	public void setValues(List<String> value) {
+		this.values = value;
 	}
 	
 	

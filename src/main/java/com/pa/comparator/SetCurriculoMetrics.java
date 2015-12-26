@@ -14,7 +14,19 @@ import com.pa.util.EnumPublicationLocalType;
 import com.pa.util.EnumQualisClassification;
 
 public class SetCurriculoMetrics {
-//TODO
+
+	private static SetCurriculoMetrics instance = null;
+	
+	private SetCurriculoMetrics() {}
+	
+	public static SetCurriculoMetrics getInstance() {
+		if(instance == null) {
+			instance = new SetCurriculoMetrics();
+		}
+		
+		return instance;
+	}
+	
 	public SetCurriculoResult calculateMetrics(Group group, Map<EnumPublicationLocalType, QualisData> qualisDataMap) {
 		Map<EnumPublicationLocalType, Map<EnumQualisClassification, Double>> mapQualis = this.initiMapQualis();
 		Double concludedOrientations = 0.0;
