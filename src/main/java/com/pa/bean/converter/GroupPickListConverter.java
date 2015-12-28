@@ -1,4 +1,4 @@
-package com.pa.bean;
+package com.pa.bean.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

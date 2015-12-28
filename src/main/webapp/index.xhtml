@@ -18,10 +18,11 @@
 					<h:outputText value="Grupos de Currículos" />
 				</b:column>
 				<b:column span="1">
-					<b:label text="Carregado" severity="success" />
+					<b:label text="Carregado" severity="success" rendered="#{indexBean.groupsSize gt 0}"/>
+					<b:label text="Não Carregado" severity="danger" rendered="#{indexBean.groupsSize eq 0}"/>
 				</b:column>
 				<b:column span="2">
-					<b:badge value="10" />
+					<b:badge value="#{indexBean.groupsSize}" />
 				</b:column>
 			</b:row>
 			<b:row>
@@ -29,10 +30,11 @@
 					<h:outputText value="Classificação Qualis" />
 				</b:column>
 				<b:column span="1">
-					<b:label text="Não Carregado" severity="danger" />
+					<b:label text="Carregado" severity="success" rendered="#{indexBean.qualisSize gt 0}"/>
+					<b:label text="Não Carregado" severity="danger" rendered="#{indexBean.qualisSize eq 0}"/>
 				</b:column>
 				<b:column span="2">
-					<b:badge value="0" />
+					<b:badge value="#{indexBean.qualisSize}" />
 				</b:column>
 			</b:row>
 			<b:row>
@@ -40,10 +42,11 @@
 					<h:outputText value="Total de Currículos Lattes" />
 				</b:column>
 					<b:column span="1">
-					<b:label text="Carregado" severity="success" />
+					<b:label text="Carregado" severity="success" rendered="#{indexBean.curriculosSize gt 0}"/>
+					<b:label text="Não Carregado" severity="danger" rendered="#{indexBean.curriculosSize eq 0}"/>
 				</b:column>
 				<b:column span="2">
-					<b:badge value="230" />
+					<b:badge value="#{indexBean.curriculosSize}" />
 				</b:column>
 			</b:row>			
 		</b:container>

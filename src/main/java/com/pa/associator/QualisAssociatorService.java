@@ -36,7 +36,7 @@ public class QualisAssociatorService {
 		if(qualisDataMap != null && qualisDataMap.containsKey(publicationLocalType)) {
 			QualisData qualisData = qualisDataMap.get(publicationLocalType);
 			
-			if(qualisData.getQualis() != null && !qualisData.getQualis().isEmpty()) {
+			if(qualisData != null && qualisData.getQualis() != null && !qualisData.getQualis().isEmpty()) {
 				for (Qualis qualis : qualisData.getQualis()) {
 					if(qualis.getName().equals(publication.getPublicationType().getName())) {
 						qualisClassification = qualis.getClassification();

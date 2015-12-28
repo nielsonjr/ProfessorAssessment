@@ -16,31 +16,32 @@
 			<b:well>			    
 			        <h:form>
 						<b:row>
-						    <b:column span="4">
-					            <p:outputLabel for="idQualisYear" value="Ano de referência Qualis" />
-						        <p:selectOneMenu id="idQualisYear" value="#{loadQualisBean.qualisYear}" effect="fade" filter="true" filterMatchMode="startsWith" style="width:125px;" onchange="">
-						            <f:selectItem itemLabel="Escolha o Ano" itemValue="" />
-						            <f:selectItems value="#{loadQualisBean.qualisYears}" />						            
-						            <p:ajax event="change" update="idQualisYear" />
-						        </p:selectOneMenu>
-						        
-						        <p:selectOneRadio id="qualisType" value="#{loadQualisBean.qualisType}">
-						            <f:selectItem itemLabel="Periódico" itemValue="Periódico" />
-						            <f:selectItem itemLabel="Conferência" itemValue="Conferência" />	
-						            <p:ajax event="change" update="qualisType" />
-						        </p:selectOneRadio>	
-						        
-						        
-						         <p:fileUpload fileUploadListener="#{loadQualisBean.uploadQualisFile}" mode="advanced" dragDropSupport="true"
-							           label="Escolher Arquivo"  update="@form" uploadLabel="Carregar"  cancelLabel="Cancelar" sizeLimit="10000000" allowTypes="/(\.|\/)(xls|xlsx)$/" />
-							</b:column>
+				            <p:outputLabel for="idQualisYear" value="Ano de referência Qualis: " />
+					        <p:selectOneMenu id="idQualisYear" value="#{loadQualisBean.qualisYear}" effect="fade" filter="true" filterMatchMode="startsWith" style="width:200px;">
+					            <f:selectItem itemLabel="Escolha o Ano" itemValue="" />
+					            <f:selectItems value="#{loadQualisBean.qualisYears}" />						            
+					            <p:ajax event="change" update="idQualisYear" />
+					        </p:selectOneMenu>
 						</b:row>
-											
+						<b:row>
+							<p:outputLabel for="qualisType" value="Tipo: " />
+							<p:selectOneRadio id="qualisType"
+								value="#{loadQualisBean.qualisType}">
+								<f:selectItem itemLabel="Periódico" itemValue="Periódico" />
+								<f:selectItem itemLabel="Conferência" itemValue="Conferência" />
+								<p:ajax event="change" update="qualisType" />
+							</p:selectOneRadio>
+						</b:row>
+						<b:row>
+							<p:fileUpload fileUploadListener="#{loadQualisBean.uploadQualisFile}" mode="advanced" dragDropSupport="true"
+							           label="Escolher Arquivo"  update="@form" uploadLabel="Carregar"  cancelLabel="Cancelar" sizeLimit="10000000" allowTypes="/(\.|\/)(xls|xlsx)$/" />
+							<p:spacer height="10"/>
+						</b:row>			
 						<b:row>						
 							<p:dataTable id="qualisDataTable" var="qualisData" value="#{loadQualisBean.qualisDatas}" widgetVar="qualisDatasTable"
 	               						  emptyMessage="Nenhum Qualis encontrado!" filteredValue="#{loadQualisBean.filteredQualisDatas}">
 	               			
-		               			<p:column filterBy="#{qualisData.type}" headerText="Tipo" filterMatchMode="equals">
+		               			<p:column filterBy="#{qualisData.type.name}" headerText="Tipo" filterMatchMode="equals">
 						            <f:facet name="filter">
 						                <p:selectOneButton onchange="PF('qualisDatasTable').filter()">						                   
 						                    <f:selectItem itemLabel="Todos" itemValue="" />
@@ -48,7 +49,7 @@
 						                    <f:selectItem itemLabel="Conferência" itemValue="Conferência" />
 						                </p:selectOneButton>
 						            </f:facet>
-						            <h:outputText value="#{qualisData.type}" />
+						            <h:outputText value="#{qualisData.type.name}" />
 						        </p:column>						        
 						        
 						        <p:column filterBy="#{qualisData.year}" headerText="Ano" filterMatchMode="equals">

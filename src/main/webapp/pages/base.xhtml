@@ -10,6 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Professor Assessment</title>
 	<link rel="shortcut icon" href="#{request.contextPath}/resources/images/favicon.ico" />
+	
 </h:head>
 
 <!-- Add 50px padding top to the body for the navbar -->
@@ -18,7 +19,11 @@
 	<b:navBar brand="Professor Assessment" brandHref="#{request.contextPath}/index.xhtml" inverse="true" fixed="top">
 		<b:navbarLinks>
 			<b:navLink value="Carregar Qualis" href="/pages/carregarQualis.xhtml" />
-			<b:navLink value="Criar Grupos" href="/pages/criarGrupos.xhtml" />
+			<b:dropMenu value="Grupos" >
+				<b:navLink value="Criar Grupos" href="/pages/criarGrupos.xhtml"  />
+				<b:navLink value="Gerenciar Grupos" href="/pages/gerenciarGrupos.xhtml"  />
+			</b:dropMenu>
+			
 			<b:navLink value="Relatório" href="/pages/relatorio.xhtml" />			
 		</b:navbarLinks>
 	</b:navBar>

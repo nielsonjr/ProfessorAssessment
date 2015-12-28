@@ -72,7 +72,7 @@ public class MultipleXMLExtractor {
 	public boolean checkCurriculoExistence(List<Curriculo> curriculos) {
 		boolean exist = false;
 		
-		for (Curriculo curriculo : curriculos) {
+		for (Curriculo curriculo : curriculos) {			
 			Curriculo databaseCurriculo = DatabaseFacade.getInstance().getCurriculoById(curriculo.getId());
 			if (databaseCurriculo != null) {
 				exist = true;
